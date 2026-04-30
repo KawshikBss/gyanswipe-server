@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\ContentController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -18,4 +19,12 @@ Route::group(['prefix' => 'categories'], function () {
     Route::get('/{category}', [CategoryController::class, 'show']);
     Route::post('/{category}/update', [CategoryController::class, 'update']);
     Route::delete('/{category}', [CategoryController::class, 'destroy']);
+});
+
+Route::group(['prefix' => 'contents'], function () {
+    Route::get('/', [ContentController::class, 'index']);
+    Route::post('/', [ContentController::class, 'store']);
+    Route::get('/{content}', [ContentController::class, 'show']);
+    Route::post('/{content}/update', [ContentController::class, 'update']);
+    Route::delete('/{content}', [ContentController::class, 'destroy']);
 });
