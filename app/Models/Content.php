@@ -10,4 +10,21 @@ class Content extends Model
     protected $casts = [
         'body' => 'array',
     ];
+
+    protected $appends = ['summary'];
+
+    public function getSummaryAttribute()
+    {
+        // $data = json_decode($this->body, true);
+        if (isset($this->body['blocks']) && is_array($this->body['blocks'])) {
+            $text = '';
+            foreach ($this->body['blocks'] as $block) {
+                if (isset($block['type']) && $block['type'] === 'text' && isset($block['value'])) {
+                    $text .= strip_tags($block['value']) . ' ';
+                }
+            }
+            return trim($text);
+        }
+        return null;
+    }
 }
