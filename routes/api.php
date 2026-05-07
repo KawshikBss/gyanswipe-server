@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ContentController;
+use App\Http\Controllers\FeedController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -28,3 +29,5 @@ Route::group(['prefix' => 'contents'], function () {
     Route::post('/{content}/update', [ContentController::class, 'update']);
     Route::delete('/{content}', [ContentController::class, 'destroy']);
 });
+
+Route::get('/feed', [FeedController::class, 'index']);
