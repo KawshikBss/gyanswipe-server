@@ -27,4 +27,9 @@ class Content extends Model
         }
         return null;
     }
+
+    public function activities()
+    {
+        return $this->hasMany(UserActivity::class);
+    }
 }
