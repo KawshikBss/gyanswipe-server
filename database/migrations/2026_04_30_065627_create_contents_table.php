@@ -23,6 +23,9 @@ return new class extends Migration
             $table->double('rating')->default(0);
             $table->boolean('is_published')->default(false);
             $table->timestamp('published_at')->nullable();
+            $table->unsignedInteger('like_count')->default(0);
+            $table->unsignedInteger('save_count')->default(0);
+            $table->unsignedInteger('view_count')->default(0);
             $table->timestamps();
         });
     }
