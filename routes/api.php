@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ActivityController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ContentController;
 use App\Http\Controllers\FeedController;
@@ -31,3 +32,6 @@ Route::group(['prefix' => 'contents'], function () {
 });
 
 Route::get('/feed', [FeedController::class, 'index']);
+
+Route::post('/activities/toggle', [ActivityController::class, 'toggle']);
+Route::post('/activities/view', [ActivityController::class, 'view']);
