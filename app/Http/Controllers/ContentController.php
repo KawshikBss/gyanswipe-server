@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Content;
+use App\Models\UserActivity;
 use Illuminate\Http\Request;
 
 class ContentController extends Controller
@@ -38,8 +39,16 @@ class ContentController extends Controller
         return response()->json($content, 201);
     }
 
-    public function show(Content $content)
+    public function show(Request $request, Content $content)
     {
+        $activities = UserActivity::query()
+            ->where('device_id', $request->device_id)
+            ->where('content_id', $content->id)
+            ->get();
+        $activitySet = $activities->pluck('action');
+        $content->is_liked = $activitySet->contains('like');
+        $content->is_saved = $activitySet->contains('save');
+        $content->is_viewed = $activitySet->contains('view');
         return response()->json($content);
     }
 
