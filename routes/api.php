@@ -32,6 +32,7 @@ Route::group(['prefix' => 'contents'], function () {
 });
 
 Route::get('/feed', [FeedController::class, 'index']);
+Route::get('/saved', [FeedController::class, 'saved']);
 
 Route::post('/activities/toggle', [ActivityController::class, 'toggle']);
 Route::post('/activities/view', [ActivityController::class, 'view']);
