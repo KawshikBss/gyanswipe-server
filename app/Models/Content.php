@@ -23,7 +23,7 @@ class Content extends Model
                     $text .= strip_tags($block['value']) . ' ';
                 }
             }
-            return trim($text);
+            return substr(trim($text), 0, 200) . (strlen($text) > 200 ? '...' : '');
         }
         return null;
     }
