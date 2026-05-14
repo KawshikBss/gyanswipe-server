@@ -40,4 +40,38 @@ class FeedController extends Controller
         );
         return response()->json($contents);
     }
+
+    public function saved(Request $request)
+    {
+        $activities = UserActivity::query()
+            ->where('device_id', $request->device_id)
+            ->where('action', 'save')->get();
+        $contentIds = $activities->pluck('content_id');
+        $contents = Content::whereIn('id', $contentIds)->paginate(1);
+        $activities = UserActivity::query()
+            ->where('device_id', $request->device_id)
+            ->whereIn('content_id', $contentIds)
+            ->get();
+        $grouped = $activities->groupBy('content_id');
+        $contents->getCollection()->transform(
+            function ($content) use ($grouped) {
+
+                $activitySet =
+                    collect($grouped[$content->id] ?? [])
+                    ->pluck('action');
+
+                $content->is_liked =
+                    $activitySet->contains('like');
+
+                $content->is_saved =
+                    $activitySet->contains('save');
+
+                $content->is_viewed =
+                    $activitySet->contains('view');
+
+                return $content;
+            }
+        );
+        return response()->json($contents);
+    }
 }
