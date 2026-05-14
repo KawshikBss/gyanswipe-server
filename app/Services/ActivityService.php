@@ -39,12 +39,10 @@ class ActivityService
                 $existing->delete();
 
                 $content->decrement($counterField);
-                $content['is_' . $action . 'd'] = false;
 
                 return [
                     'active' => false,
-                    'message' => ucfirst($action) . ' removed',
-                    'updated' => $content
+                    'message' => 'Content removed',
                 ];
             }
 
@@ -55,12 +53,10 @@ class ActivityService
             ]);
 
             $content->increment($counterField);
-            $content['is_' . $action . 'd'] = true;
 
             return [
                 'active' => true,
-                'message' => ucfirst($action) . ' added',
-                'updated' => $content
+                'message' => 'Content ' . $action . 'd',
             ];
         });
     }
