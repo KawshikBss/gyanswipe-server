@@ -20,6 +20,7 @@ Route::group(['prefix' => 'categories'], function () {
     Route::post('/', [CategoryController::class, 'store']);
     Route::get('/{category}', [CategoryController::class, 'show']);
     Route::post('/{category}/update', [CategoryController::class, 'update']);
+    Route::post('/{category}/toggle-preference', [CategoryController::class, 'togglePreference']);
     Route::delete('/{category}', [CategoryController::class, 'destroy']);
 });
 
@@ -33,6 +34,7 @@ Route::group(['prefix' => 'contents'], function () {
 
 Route::get('/feed', [FeedController::class, 'index']);
 Route::get('/saved', [FeedController::class, 'saved']);
+Route::get('/search', [FeedController::class, 'search']);
 
 Route::post('/activities/toggle', [ActivityController::class, 'toggle']);
 Route::post('/activities/view', [ActivityController::class, 'view']);
