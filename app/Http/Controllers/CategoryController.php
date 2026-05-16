@@ -3,13 +3,19 @@
 namespace App\Http\Controllers;
 
 use App\Models\Category;
+use App\Models\UserPreferredCategory;
 use Illuminate\Http\Request;
 
 class CategoryController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         $categories = Category::paginate(10);
+        $userPreferredCategories = UserPreferredCategory::where('device_id', $request->device_id)->pluck('category_id')->toArray();
+        $categories->getCollection()->transform(function ($category) use ($userPreferredCategories) {
+            $category->is_preferred = in_array($category->id, $userPreferredCategories);
+            return $category;
+        });
         return response()->json($categories);
     }
 
@@ -69,5 +75,27 @@ class CategoryController extends Controller
     {
         $category->delete();
         return response()->json(['message' => 'Category deleted successfully'], 204);
+    }
+
+    public function togglePreference(Request $request, Category $category)
+    {
+        $request->validate([
+            'device_id' => 'required|string|max:255',
+        ]);
+
+        $userPreferredCategory = UserPreferredCategory::where('device_id', $request->device_id)
+            ->where('category_id', $category->id)
+            ->first();
+
+        if ($userPreferredCategory) {
+            $userPreferredCategory->delete();
+            return response()->json(['message' => 'Preference removed', 'active' => false]);
+        } else {
+            UserPreferredCategory::create([
+                'device_id' => $request->device_id,
+                'category_id' => $category->id,
+            ]);
+            return response()->json(['message' => 'Preference added', 'active' => true]);
+        }
     }
 }
