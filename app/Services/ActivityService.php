@@ -11,7 +11,9 @@ class ActivityService
     public function toggle(
         string $deviceId,
         int $contentId,
-        string $action
+        string $action,
+        float $durationSeconds,
+        string $source = 'feed',
     ): array {
 
         $counterField = match ($action) {
@@ -23,7 +25,9 @@ class ActivityService
             $deviceId,
             $contentId,
             $action,
-            $counterField
+            $counterField,
+            $durationSeconds,
+            $source,
         ) {
 
             $existing = UserActivity::where([
@@ -46,11 +50,32 @@ class ActivityService
                 ];
             }
 
+            $completionPercent = null;
+            if ($source === 'details') {
+                $totalDuration = $content->duration_seconds;
+                if ($totalDuration > 0) {
+                    $completionPercent = min(100, ($durationSeconds / $totalDuration) * 100);
+                }
+            }
+
             UserActivity::create([
                 'device_id' => $deviceId,
                 'content_id' => $contentId,
+                'category_id' => $content->category_id,
                 'action' => $action,
+                'duration_seconds' => $durationSeconds,
+                'completion_percent' => $completionPercent,
+                'source' => $source,
             ]);
+
+            app(CategoryAffinityService::class)->update(
+                $deviceId,
+                $content->category_id,
+                $action,
+                $durationSeconds,
+                $completionPercent,
+                $source
+            );
 
             $content->increment($counterField);
 
@@ -63,32 +88,59 @@ class ActivityService
 
     public function trackView(
         string $deviceId,
-        int $contentId
-    ): void {
+        int $contentId,
+        float $durationSeconds,
+        string $source = 'feed',
+    ) {
 
-        $alreadyViewed = UserActivity::where([
+        $activity = UserActivity::where([
             'device_id' => $deviceId,
             'content_id' => $contentId,
             'action' => 'view',
-        ])->exists();
+        ])->first();
 
-        if ($alreadyViewed) {
+        if ($activity) {
+            $activity->increment('duration_seconds', $durationSeconds);
             return;
         }
 
         DB::transaction(function () use (
             $deviceId,
-            $contentId
+            $contentId,
+            $durationSeconds,
+            $source,
         ) {
+
+            $content = Content::findOrFail($contentId);
+
+            $completionPercent = null;
+            if ($source === 'details') {
+                $totalDuration = $content->duration_seconds;
+                if ($totalDuration > 0) {
+                    $completionPercent = min(100, ($durationSeconds / $totalDuration) * 100);
+                }
+            }
 
             UserActivity::create([
                 'device_id' => $deviceId,
                 'content_id' => $contentId,
+                'category_id' => $content->category_id,
                 'action' => 'view',
+                'duration_seconds' => $durationSeconds,
+                'completion_percent' => $completionPercent,
+                'source' => $source,
             ]);
 
-            Content::where('id', $contentId)
-                ->increment('view_count');
+            app(CategoryAffinityService::class)->update(
+                $deviceId,
+                $content->category_id,
+                'view',
+                $durationSeconds,
+                $completionPercent,
+                $source
+            );
+
+            $content->increment('view_count');
         });
     }
 }
