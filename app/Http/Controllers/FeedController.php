@@ -87,8 +87,8 @@ class FeedController extends Controller
     public function search(Request $request)
     {
         $query = $request->input('query');
-        $categories = $request->input('categories', []);
-        if (is_string($categories)) {
+        $categories = $request->input('categories', []) ?? [];
+        if (is_string($categories) && !empty($categories)) {
             $categories = explode(',', $categories);
         }
         $contents = Content::where('is_published', true)->when(
