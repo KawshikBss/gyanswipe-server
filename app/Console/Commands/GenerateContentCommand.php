@@ -31,12 +31,14 @@ class GenerateContentCommand extends Command
 
         $categories = Category::get();
         foreach ($categories as $category) {
-            $content =
-                $service->generateFromCategory($category);
+            for ($i = 0; $i < 10; $i++) {
+                $content =
+                    $service->generateFromCategory($category);
 
-            $this->info(
-                "Generated content: {$content->title}"
-            );
+                $this->info(
+                    "Generated content: {$content->title}"
+                );
+            }
         }
     }
 }
