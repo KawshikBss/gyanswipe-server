@@ -73,7 +73,7 @@ class ContentGenerationService
             'duration_seconds' =>
             $duration,
 
-            'is_published' => false,
+            'is_published' => true,
         ]);
 
         // Dispatch async jobs
