@@ -19,181 +19,181 @@ class CategorySeeder extends Seeder
             [
                 'name' => 'Mindset',
                 'slug' => 'mindset',
-                'icon' => '🧠',
+                'thumbnail' => '🧠',
             ],
 
             [
                 'name' => 'Psychology',
                 'slug' => 'psychology',
-                'icon' => '🧩',
+                'thumbnail' => '🧩',
             ],
 
             [
                 'name' => 'Mystery',
                 'slug' => 'mystery',
-                'icon' => '🕵️',
+                'thumbnail' => '🕵️',
             ],
 
             [
                 'name' => 'Dark Facts',
                 'slug' => 'dark-facts',
-                'icon' => '🌑',
+                'thumbnail' => '🌑',
             ],
 
             [
                 'name' => 'Stoic',
                 'slug' => 'stoic',
-                'icon' => '🏛️',
+                'thumbnail' => '🏛️',
             ],
 
             [
                 'name' => 'Space',
                 'slug' => 'space',
-                'icon' => '🌌',
+                'thumbnail' => '🌌',
             ],
 
             [
                 'name' => 'AI',
                 'slug' => 'ai',
-                'icon' => '🤖',
+                'thumbnail' => '🤖',
             ],
 
             [
                 'name' => 'History',
                 'slug' => 'history',
-                'icon' => '📜',
+                'thumbnail' => '📜',
             ],
 
             [
                 'name' => 'Survival',
                 'slug' => 'survival',
-                'icon' => '🔥',
+                'thumbnail' => '🔥',
             ],
 
             [
                 'name' => 'Finance',
                 'slug' => 'finance',
-                'icon' => '💰',
+                'thumbnail' => '💰',
             ],
 
             [
                 'name' => 'Tech',
                 'slug' => 'tech',
-                'icon' => '💻',
+                'thumbnail' => '💻',
             ],
 
             [
                 'name' => 'Crime',
                 'slug' => 'crime',
-                'icon' => '🚨',
+                'thumbnail' => '🚨',
             ],
 
             [
                 'name' => 'Nature',
                 'slug' => 'nature',
-                'icon' => '🍃',
+                'thumbnail' => '🍃',
             ],
 
             [
                 'name' => 'Sleep',
                 'slug' => 'sleep',
-                'icon' => '🌙',
+                'thumbnail' => '🌙',
             ],
 
             [
                 'name' => 'Focus',
                 'slug' => 'focus',
-                'icon' => '🎯',
+                'thumbnail' => '🎯',
             ],
 
             [
                 'name' => 'Habits',
                 'slug' => 'habits',
-                'icon' => '📈',
+                'thumbnail' => '📈',
             ],
 
             [
                 'name' => 'Human',
                 'slug' => 'human',
-                'icon' => '👁️',
+                'thumbnail' => '👁️',
             ],
 
             [
                 'name' => 'Future',
                 'slug' => 'future',
-                'icon' => '🚀',
+                'thumbnail' => '🚀',
             ],
 
             [
                 'name' => 'Philosophy',
                 'slug' => 'philosophy',
-                'icon' => '⚖️',
+                'thumbnail' => '⚖️',
             ],
 
             [
                 'name' => 'Energy',
                 'slug' => 'energy',
-                'icon' => '⚡',
+                'thumbnail' => '⚡',
             ],
 
             [
                 'name' => 'Dreams',
                 'slug' => 'dreams',
-                'icon' => '💭',
+                'thumbnail' => '💭',
             ],
 
             [
                 'name' => 'Longevity',
                 'slug' => 'longevity',
-                'icon' => '🧬',
+                'thumbnail' => '🧬',
             ],
 
             [
                 'name' => 'Fitness',
                 'slug' => 'fitness',
-                'icon' => '🏋️',
+                'thumbnail' => '🏋️',
             ],
 
             [
                 'name' => 'Anxiety',
                 'slug' => 'anxiety',
-                'icon' => '🌧️',
+                'thumbnail' => '🌧️',
             ],
 
             [
                 'name' => 'Love',
                 'slug' => 'love',
-                'icon' => '❤️',
+                'thumbnail' => '❤️',
             ],
 
             [
                 'name' => 'Brain',
                 'slug' => 'brain',
-                'icon' => '🧠',
+                'thumbnail' => '🧠',
             ],
 
             [
                 'name' => 'Myth',
                 'slug' => 'myth',
-                'icon' => '🐉',
+                'thumbnail' => '🐉',
             ],
 
             [
                 'name' => 'Cyber',
                 'slug' => 'cyber',
-                'icon' => '🕶️',
+                'thumbnail' => '🕶️',
             ],
 
             [
                 'name' => 'Minimal',
                 'slug' => 'minimal',
-                'icon' => '◻️',
+                'thumbnail' => '◻️',
             ],
 
             [
                 'name' => 'Chaos',
                 'slug' => 'chaos',
-                'icon' => '🌪️',
+                'thumbnail' => '🌪️',
             ],
         ];
 
@@ -204,7 +204,7 @@ class CategorySeeder extends Seeder
                 ],
                 [
                     'name' => $category['name'],
-                    'icon' => $category['icon'],
+                    'thumbnail' => $category['thumbnail'],
                 ]
             );
         }
