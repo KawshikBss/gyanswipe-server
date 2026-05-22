@@ -3,7 +3,6 @@
 namespace App\Jobs;
 
 use App\Models\Content;
-use App\Services\ImageGenerationService;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
 
@@ -11,71 +10,45 @@ class GenerateContentImagesJob implements ShouldQueue
 {
     use Queueable;
 
+    public $timeout = 60;
+
+    public $tries = 3;
+
     /**
      * Create a new job instance.
      */
     public function __construct(
         public Content $content
-    ) {
-        //
-    }
+    ) {}
 
     /**
      * Execute the job.
      */
-    public function handle(
-        ImageGenerationService $imageService
-    ): void {
+    public function handle(): void
+    {
         $body =
             $this->content->body;
 
         $blocks =
             $body['blocks'] ?? [];
 
-        $updatedBlocks =
-            collect($blocks)
-            ->map(function ($block)
-            use ($imageService) {
+        foreach ($blocks as $index => $block) {
 
-                if (
-                    $block['type'] === 'image'
-                    && isset($block['prompt'])
-                ) {
+            if (
+                $block['type'] === 'image'
+                && isset($block['prompt'])
+            ) {
 
-                    try {
-
-                        $url =
-                            $imageService
-                            ->generateAndStoreImage(
-                                $block['prompt'],
-                                'blocks'
-                            );
-
-                        return [
-                            'type' => 'image',
-                            'value' => $url,
-                        ];
-                    } catch (\Exception $e) {
-
-                        logger()->error(
-                            $e->getMessage()
-                        );
-
-                        return null;
-                    }
-                }
-
-                return $block;
-            })
-            ->filter()
-            ->values()
-            ->toArray();
-
-        $body['blocks'] =
-            $updatedBlocks;
-
-        $this->content->update([
-            'body' => $body,
-        ]);
+                GenerateSingleContentImageJob::dispatch(
+                    $this->content->id,
+                    $index,
+                    $block['prompt']
+                )->delay(
+                    now()->addSeconds(
+                        $index * 10
+                    )
+                );
+            }
+        }
     }
 }
