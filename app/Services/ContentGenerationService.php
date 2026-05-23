@@ -79,7 +79,7 @@ class ContentGenerationService
         // Dispatch async jobs
         GenerateThumbnailJob::dispatch(
             $content
-        );
+        )->delay(now()->addSeconds(5));
 
         GenerateContentImagesJob::dispatch(
             $content
