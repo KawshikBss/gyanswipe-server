@@ -13,7 +13,7 @@ class GenerateSingleContentImageJob implements ShouldQueue
 
     public $timeout = 120;
 
-    public $tries = 3;
+    public $tries = 1;
 
     /**
      * Create a new job instance.
