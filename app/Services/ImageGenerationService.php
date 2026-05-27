@@ -26,7 +26,7 @@ class ImageGenerationService
             . urlencode($cleanPrompt);
 
         $response = Http::retry(3, 2000)
-            ->timeout(120)
+            ->timeout(20)
             ->withoutVerifying()
             ->get($url);
 
