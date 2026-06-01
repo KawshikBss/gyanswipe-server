@@ -90,10 +90,8 @@ class ContentMediaService
                         'blocks'
                     );
 
-                $blocks[$index] = [
-                    'type' => 'image',
-                    'value' => $url,
-                ];
+                $blocks[$index]['value'] = $url;
+                unset($blocks[$index]['prompt']);
 
                 $body['blocks'] =
                     $blocks;

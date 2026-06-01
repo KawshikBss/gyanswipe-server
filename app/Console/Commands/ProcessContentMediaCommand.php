@@ -29,14 +29,28 @@ class ProcessContentMediaCommand extends Command
         ContentMediaService $service
     ) {
 
-        $content =
-            Content::query()
-            ->where(function ($query) {
+        $content = Content::all()
+            ->first(function ($content) {
 
-                $query->whereNull('thumbnail');
-            })
-            ->oldest()
-            ->first();
+                if (empty($content->thumbnail)) {
+                    return true;
+                }
+
+                $blocks =
+                    $content->body['blocks'] ?? [];
+
+                foreach ($blocks as $block) {
+
+                    if (
+                        ($block['type'] ?? null) === 'image'
+                        && isset($block['prompt'])
+                    ) {
+                        return true;
+                    }
+                }
+
+                return false;
+            });
 
         if (!$content) {
 
