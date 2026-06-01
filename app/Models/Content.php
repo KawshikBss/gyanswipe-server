@@ -32,4 +32,23 @@ class Content extends Model
     {
         return $this->hasMany(UserActivity::class);
     }
+
+    function cleanUtf8($data)
+    {
+        if (is_array($data)) {
+            return array_map('cleanUtf8', $data);
+        }
+
+        if (is_string($data)) {
+            return mb_convert_encoding($data, 'UTF-8', 'UTF-8, ISO-8859-1, Windows-1252');
+        }
+
+        return $data;
+    }
+
+    public function setBodyAttribute($value)
+    {
+        $value = $this->cleanUtf8($value);
+        $this->attributes['body'] = json_encode($value);
+    }
 }
