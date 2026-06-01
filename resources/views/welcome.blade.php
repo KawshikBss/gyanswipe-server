@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
     <head>
         <meta charset="utf-8">
@@ -14,108 +14,455 @@
                 @import 'tailwindcss';
             </style>
         @endif
+        <style>
+            :root {
+                color-scheme: light dark;
+                font-family: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif;
+            }
+            * {
+                box-sizing: border-box;
+                margin: 0;
+                padding: 0;
+            }
+            body {
+                background: #FDFDFC;
+                color: #1b1b18;
+                min-height: 100vh;
+            }
+            @media (prefers-color-scheme: dark) {
+                body {
+                    background: #050505;
+                    color: #F7F7F7;
+                }
+            }
+            .page-shell {
+                min-height: 100vh;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                padding: 2rem 1.5rem;
+            }
+            .page-inner {
+                width: 100%;
+                max-width: 1200px;
+            }
+            .site-header {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                gap: 1rem;
+                margin-bottom: 2rem;
+            }
+            .brand {
+                display: inline-flex;
+                align-items: center;
+                gap: 0.75rem;
+                font-size: 1.25rem;
+                font-weight: 700;
+                text-decoration: none;
+                color: inherit;
+            }
+            .brand-badge {
+                width: 44px;
+                height: 44px;
+                display: grid;
+                place-items: center;
+                border-radius: 1rem;
+                background: #f53003;
+                color: #fff;
+                box-shadow: 0 20px 40px rgba(245, 48, 3, 0.42);
+            }
+            .nav-links {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 0.75rem;
+                font-size: 0.95rem;
+            }
+            .nav-links a {
+                border-radius: 999px;
+                padding: 0.65rem 1.2rem;
+                color: inherit;
+                text-decoration: none;
+                transition: all 0.2s ease;
+                border: 1px solid transparent;
+                background: rgba(255, 255, 255, 0.92);
+            }
+            @media (prefers-color-scheme: dark) {
+                .nav-links a {
+                    background: #111111;
+                }
+            }
+            .nav-links a:hover {
+                background: #1b1b18;
+                color: #fff;
+            }
+            .hero-grid {
+                display: grid;
+                gap: 2.5rem;
+                align-items: center;
+                grid-template-columns: 1.1fr 0.9fr;
+            }
+            .hero-wrapper {
+                display: flex;
+                flex-direction: column;
+                gap: 1.75rem;
+            }
+            .hero-badge {
+                display: inline-flex;
+                align-items: center;
+                gap: 0.5rem;
+                background: #fff1ef;
+                color: #f53003;
+                border-radius: 999px;
+                padding: 0.75rem 1rem;
+                font-weight: 700;
+                font-size: 0.95rem;
+            }
+            @media (prefers-color-scheme: dark) {
+                .hero-badge {
+                    background: #320b0c;
+                    color: #ffb5ae;
+                }
+            }
+            .hero-title {
+                font-size: clamp(2.5rem, 4vw, 4.5rem);
+                line-height: 1.03;
+                margin: 0;
+                font-weight: 800;
+            }
+            .hero-copy {
+                line-height: 1.9;
+                color: #575657;
+                max-width: 44rem;
+            }
+            @media (prefers-color-scheme: dark) {
+                .hero-copy {
+                    color: #d1d1d1;
+                }
+            }
+            .download-row {
+                display: flex;
+                flex-wrap: wrap;
+                align-items: center;
+                gap: 1rem;
+            }
+            .download-btn {
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                padding: 1rem 2rem;
+                border-radius: 999px;
+                background: #f53003;
+                color: #fff;
+                font-size: 1rem;
+                font-weight: 700;
+                text-decoration: none;
+                box-shadow: 0 20px 40px rgba(245, 48, 3, 0.42);
+                transition: transform 0.2s ease, background 0.2s ease;
+            }
+            .download-btn:hover {
+                transform: translateY(-2px);
+                background: #d02502;
+            }
+            .download-note {
+                color: #6a6a67;
+            }
+            @media (prefers-color-scheme: dark) {
+                .download-note {
+                    color: #bdbdbd;
+                }
+            }
+            .features-grid {
+                display: grid;
+                gap: 1rem;
+                grid-template-columns: repeat(3, minmax(0, 1fr));
+            }
+            .feature-card {
+                background: #fff;
+                border: 1px solid #e6e2de;
+                border-radius: 1.75rem;
+                padding: 1.5rem;
+                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            }
+            .feature-card p:first-child {
+                margin: 0;
+                font-weight: 700;
+                color: #f53003;
+                font-size: 0.95rem;
+            }
+            .feature-card p:last-child {
+                margin-top: 0.75rem;
+                color: #575657;
+                font-size: 0.95rem;
+                line-height: 1.65;
+            }
+            @media (prefers-color-scheme: dark) {
+                .feature-card {
+                    background: #111111;
+                    border-color: #2f2f2f;
+                }
+                .feature-card p:last-child {
+                    color: #c4c4c4;
+                }
+            }
+            .visual-column {
+                position: relative;
+                display: flex;
+                justify-content: center;
+            }
+            .visual-column::before {
+                content: '';
+                position: absolute;
+                left: -3rem;
+                top: 4rem;
+                width: 10rem;
+                height: 10rem;
+                background: rgba(252, 211, 207, 0.7);
+                border-radius: 50%;
+                filter: blur(40px);
+            }
+            .visual-column::after {
+                content: '';
+                position: absolute;
+                right: -3rem;
+                bottom: 4rem;
+                width: 8rem;
+                height: 8rem;
+                background: rgba(255, 216, 185, 0.6);
+                border-radius: 50%;
+                filter: blur(40px);
+            }
+            .visual-card {
+                position: relative;
+                width: 100%;
+                max-width: 420px;
+                background: #fff;
+                border-radius: 2rem;
+                border: 1px solid #e8e4e0;
+                box-shadow: 0 40px 120px rgba(0, 0, 0, 0.18);
+                overflow: hidden;
+            }
+            .visual-top {
+                background: linear-gradient(135deg, #5b3bff 0%, #f53003 50%, #ff8b4d 100%);
+                padding: 1.5rem;
+                color: #fff;
+            }
+            .visual-top .top-row {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+            }
+            .visual-top .top-row span:first-child {
+                text-transform: uppercase;
+                letter-spacing: 0.18em;
+                font-size: 0.78rem;
+                font-weight: 700;
+            }
+            .visual-top .top-row span:last-child {
+                background: rgba(255, 255, 255, 0.15);
+                border-radius: 999px;
+                padding: 0.5rem 0.75rem;
+                font-size: 0.72rem;
+                font-weight: 700;
+            }
+            .visual-top .subtitle {
+                margin-top: 1rem;
+                opacity: 0.92;
+                font-size: 0.95rem;
+            }
+            .visual-body {
+                padding: 1.5rem;
+                display: grid;
+                gap: 1rem;
+                background: #f7f6f2;
+            }
+            @media (prefers-color-scheme: dark) {
+                .visual-body {
+                    background: #111419;
+                }
+            }
+            .card-block {
+                border-radius: 1.75rem;
+                padding: 1.25rem;
+                background: #fff;
+            }
+            @media (prefers-color-scheme: dark) {
+                .card-block {
+                    background: #16171c;
+                }
+            }
+            .card-block .text-row {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin-bottom: 1rem;
+                font-weight: 700;
+                color: #1b1b18;
+            }
+            .card-block .text-row span:last-child {
+                font-size: 0.75rem;
+                color: #7a7a77;
+            }
+            .content-stack {
+                display: grid;
+                gap: 1rem;
+            }
+            .content-card {
+                border-radius: 1.75rem;
+                background: #fff;
+                padding: 1rem;
+                box-shadow: 0 10px 24px rgba(0,0,0,0.05);
+            }
+            .content-title {
+                margin: 0;
+                font-weight: 700;
+                color: #1b1b18;
+            }
+            .content-copy {
+                margin-top: 0.75rem;
+                font-size: 0.85rem;
+                line-height: 1.7;
+                color: #6b6b68;
+            }
+            @media (prefers-color-scheme: dark) {
+                .content-card {
+                    background: #16171c;
+                }
+                .content-title {
+                    color: #fff;
+                }
+                .content-copy {
+                    color: #9b9b9b;
+                }
+            }
+            .stat-grid {
+                display: grid;
+                gap: 1rem;
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+            .stat-card {
+                border-radius: 1.75rem;
+                padding: 1.25rem;
+                text-align: center;
+                border: 1px solid #e6e2de;
+                background: #fff;
+            }
+            @media (prefers-color-scheme: dark) {
+                .stat-card {
+                    background: #111111;
+                    border-color: #2f2f2f;
+                }
+            }
+            .stat-card h2 {
+                margin: 0;
+                font-size: 2rem;
+                font-weight: 800;
+            }
+            .stat-card p {
+                margin-top: 0.75rem;
+                font-size: 0.72rem;
+                text-transform: uppercase;
+                letter-spacing: 0.18em;
+                color: #7a7a77;
+            }
+            @media (max-width: 900px) {
+                .hero-grid {
+                    grid-template-columns: 1fr;
+                }
+                .features-grid {
+                    grid-template-columns: 1fr;
+                }
+            }
+            @media (max-width: 600px) {
+                .download-row {
+                    flex-direction: column;
+                    align-items: flex-start;
+                }
+            }
+        </style>
     </head>
-    <body class="bg-[#FDFDFC] dark:bg-[#050505] text-[#1b1b18] dark:text-[#F7F7F7] min-h-screen">
-        <div class="mx-auto flex min-h-screen max-w-7xl flex-col px-6 py-8 lg:px-10 lg:py-12">
-            <header class="flex items-center justify-between gap-4 pb-8">
-                <a href="/" class="inline-flex items-center gap-3 text-xl font-semibold tracking-tight text-[#1b1b18] dark:text-white">
-                    <span class="flex h-11 w-11 items-center justify-center rounded-3xl bg-[#f53003] text-white shadow-[0_20px_40px_-24px_rgba(245,48,3,0.9)]">G</span>
+    <body class="page-shell">
+        <div class="page-inner">
+            <header class="site-header">
+                <a href="/" class="brand">
+                    <span class="brand-badge">G</span>
                     <span>GyanSwipe</span>
                 </a>
                 @if (Route::has('login'))
-                    <nav class="flex items-center gap-3 text-sm">
+                    <nav class="nav-links">
                         @auth
-                            <a href="{{ url('/dashboard') }}" class="rounded-full border border-[#1b1b18] bg-white px-4 py-2 text-sm font-medium text-[#1b1b18] transition hover:bg-[#1b1b18] hover:text-white dark:border-[#444444] dark:bg-[#111111] dark:text-[#F7F7F7] dark:hover:bg-[#f53003]">
-                                Dashboard
-                            </a>
+                            <a href="{{ url('/dashboard') }}">Dashboard</a>
                         @else
-                            <a href="{{ route('login') }}" class="rounded-full px-4 py-2 text-sm font-medium text-[#1b1b18] transition hover:text-[#f53003] dark:text-[#F7F7F7]">
-                                Log in
-                            </a>
+                            <a href="{{ route('login') }}">Log in</a>
                             @if (Route::has('register'))
-                                <a href="{{ route('register') }}" class="rounded-full border border-[#1b1b18] bg-white px-4 py-2 text-sm font-medium text-[#1b1b18] transition hover:bg-[#1b1b18] hover:text-white dark:border-[#444444] dark:bg-[#111111] dark:text-[#F7F7F7] dark:hover:bg-[#f53003]">
-                                    Register
-                                </a>
+                                <a href="{{ route('register') }}">Register</a>
                             @endif
                         @endauth
                     </nav>
                 @endif
             </header>
 
-            <main class="grid flex-1 items-center gap-12 lg:grid-cols-[1.1fr_0.9fr]">
-                <section class="space-y-8">
-                    <div class="max-w-2xl space-y-5">
-                        <p class="inline-flex items-center gap-2 rounded-full bg-[#fff1ef] px-4 py-2 text-sm font-semibold text-[#f53003] dark:bg-[#320b0c] dark:text-[#ffb5ae]">
-                            Social media learning reimagined
-                        </p>
-                        <h1 class="text-5xl font-semibold tracking-tight text-[#1b1b18] dark:text-white sm:text-6xl">
-                            GyanSwipe brings learning to your feed.
-                        </h1>
-                        <p class="text-base leading-8 text-[#575657] dark:text-[#d1d1d1]">
-                            Swipe through micro-lessons, join active learner communities, and keep knowledge within reach. GyanSwipe is built for curiosity, speed, and social learning on Android.
-                        </p>
+            <main class="hero-grid">
+                <section class="hero-wrapper">
+                    <span class="hero-badge">Social media learning reimagined</span>
+                    <h1 class="hero-title">GyanSwipe brings learning to your feed.</h1>
+                    <p class="hero-copy">Swipe through micro-lessons, join active learner communities, and keep knowledge within reach. GyanSwipe is built for curiosity, speed, and social learning on Android.</p>
+
+                    <div class="download-row">
+                        <a href="https://example.com/GyanSwipe.apk" target="_blank" rel="noreferrer noopener" class="download-btn">Download APK</a>
+                        <span class="download-note">Install directly on Android devices with one click.</span>
                     </div>
 
-                    <div class="flex flex-col gap-4 sm:flex-row sm:items-center">
-                        <a href="https://example.com/GyanSwipe.apk" target="_blank" rel="noreferrer noopener" class="inline-flex items-center justify-center rounded-full bg-[#f53003] px-8 py-4 text-base font-semibold text-white shadow-[0_20px_40px_-24px_rgba(245,48,3,0.9)] transition hover:-translate-y-0.5 hover:bg-[#d02502]">
-                            Download APK
-                        </a>
-                        <span class="text-sm text-[#6a6a67] dark:text-[#bdbdbd]">Install directly on Android devices with one click.</span>
-                    </div>
-
-                    <div class="grid gap-4 sm:grid-cols-3">
-                        <div class="rounded-3xl border border-[#e6e2de] bg-white px-5 py-6 shadow-sm dark:border-[#2f2f2f] dark:bg-[#111111]">
-                            <p class="text-sm font-semibold text-[#f53003]">Swipe-powered lessons</p>
-                            <p class="mt-3 text-sm text-[#575657] dark:text-[#c4c4c4]">Short bursts of knowledge designed for fast retention.</p>
-                        </div>
-                        <div class="rounded-3xl border border-[#e6e2de] bg-white px-5 py-6 shadow-sm dark:border-[#2f2f2f] dark:bg-[#111111]">
-                            <p class="text-sm font-semibold text-[#f53003]">Community feed</p>
-                            <p class="mt-3 text-sm text-[#575657] dark:text-[#c4c4c4]">Discover trending insights and collaborate with learners worldwide.</p>
-                        </div>
-                        <div class="rounded-3xl border border-[#e6e2de] bg-white px-5 py-6 shadow-sm dark:border-[#2f2f2f] dark:bg-[#111111]">
-                            <p class="text-sm font-semibold text-[#f53003]">Personalized path</p>
-                            <p class="mt-3 text-sm text-[#575657] dark:text-[#c4c4c4]">Get recommendations that match your interests and goals.</p>
-                        </div>
+                    <div class="features-grid">
+                        <article class="feature-card">
+                            <p>Swipe-powered lessons</p>
+                            <p>Short bursts of knowledge designed for fast retention.</p>
+                        </article>
+                        <article class="feature-card">
+                            <p>Community feed</p>
+                            <p>Discover trending insights and collaborate with learners worldwide.</p>
+                        </article>
+                        <article class="feature-card">
+                            <p>Personalized path</p>
+                            <p>Get recommendations that match your interests and goals.</p>
+                        </article>
                     </div>
                 </section>
 
-                <section class="relative flex justify-center">
-                    <div class="pointer-events-none absolute -left-10 top-14 h-40 w-40 rounded-full bg-[#fcd3cf]/70 blur-3xl"></div>
-                    <div class="pointer-events-none absolute -right-10 bottom-16 h-32 w-32 rounded-full bg-[#ffd8b9]/60 blur-3xl"></div>
-
-                    <div class="relative w-full max-w-[420px] overflow-hidden rounded-[2rem] border border-[#e8e4e0] bg-white shadow-[0_40px_120px_-60px_rgba(0,0,0,0.18)] dark:border-[#222222] dark:bg-[#111111]">
-                        <div class="bg-gradient-to-br from-[#5b3bff] via-[#f53003] to-[#ff8b4d] px-6 py-5 text-white">
-                            <div class="flex items-center justify-between">
-                                <span class="text-sm font-semibold uppercase tracking-[0.18em]">GyanSwipe</span>
-                                <span class="rounded-full bg-white/15 px-3 py-1 text-xs font-medium">Beta</span>
+                <section class="visual-column">
+                    <div class="visual-card">
+                        <div class="visual-top">
+                            <div class="top-row">
+                                <span>GyanSwipe</span>
+                                <span>Beta</span>
                             </div>
-                            <div class="mt-4 text-sm text-white/90">Social learning feed</div>
+                            <div class="subtitle">Social learning feed</div>
                         </div>
-                        <div class="p-6 space-y-4">
-                            <div class="rounded-[1.75rem] bg-[#f7f6f2] p-5 dark:bg-[#111419]">
-                                <div class="flex items-center justify-between mb-4">
-                                    <span class="text-sm font-semibold text-[#1b1b18] dark:text-[#f7f7f7]">Daily discovery</span>
-                                    <span class="text-xs text-[#7a7a77] dark:text-[#8f8f8f]">New</span>
+                        <div class="visual-body">
+                            <div class="card-block">
+                                <div class="text-row">
+                                    <span>Daily discovery</span>
+                                    <span>New</span>
                                 </div>
-                                <div class="space-y-3">
-                                    <div class="rounded-3xl bg-white p-4 shadow-sm dark:bg-[#16171c]">
-                                        <p class="text-sm font-semibold text-[#1b1b18] dark:text-white">Memory hacks</p>
-                                        <p class="mt-2 text-xs text-[#6b6b68] dark:text-[#9b9b9b]">Swipe through quick learning tips shared by the community.</p>
+                                <div class="content-stack">
+                                    <div class="content-card">
+                                        <p class="content-title">Memory hacks</p>
+                                        <p class="content-copy">Swipe through quick learning tips shared by the community.</p>
                                     </div>
-                                    <div class="rounded-3xl bg-white p-4 shadow-sm dark:bg-[#16171c]">
-                                        <p class="text-sm font-semibold text-[#1b1b18] dark:text-white">Flashcard streak</p>
-                                        <p class="mt-2 text-xs text-[#6b6b68] dark:text-[#9b9b9b]">Build momentum with daily review sessions.</p>
+                                    <div class="content-card">
+                                        <p class="content-title">Flashcard streak</p>
+                                        <p class="content-copy">Build momentum with daily review sessions.</p>
                                     </div>
                                 </div>
                             </div>
-                            <div class="grid gap-4 sm:grid-cols-2">
-                                <div class="rounded-3xl border border-[#e6e2de] bg-white p-4 text-center dark:border-[#2f2f2f] dark:bg-[#111111]">
-                                    <p class="text-3xl font-semibold text-[#1b1b18] dark:text-white">4.9</p>
-                                    <p class="mt-2 text-xs uppercase tracking-[0.2em] text-[#7a7a77] dark:text-[#8f8f8f]">Rating</p>
+                            <div class="stat-grid">
+                                <div class="stat-card">
+                                    <h2>4.9</h2>
+                                    <p>Rating</p>
                                 </div>
-                                <div class="rounded-3xl border border-[#e6e2de] bg-white p-4 text-center dark:border-[#2f2f2f] dark:bg-[#111111]">
-                                    <p class="text-3xl font-semibold text-[#1b1b18] dark:text-white">120K+</p>
-                                    <p class="mt-2 text-xs uppercase tracking-[0.2em] text-[#7a7a77] dark:text-[#8f8f8f]">Active learners</p>
+                                <div class="stat-card">
+                                    <h2>120K+</h2>
+                                    <p>Active learners</p>
                                 </div>
                             </div>
                         </div>
