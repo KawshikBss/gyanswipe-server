@@ -2,8 +2,6 @@
 
 namespace App\Services;
 
-use App\Jobs\GenerateContentImagesJob;
-use App\Jobs\GenerateThumbnailJob;
 use App\Models\Category;
 use App\Models\Content;
 use Illuminate\Support\Str;
@@ -75,15 +73,6 @@ class ContentGenerationService
 
             'is_published' => true,
         ]);
-
-        // Dispatch async jobs
-        GenerateThumbnailJob::dispatch(
-            $content
-        );
-
-        GenerateContentImagesJob::dispatch(
-            $content
-        );
 
         return $content;
     }
