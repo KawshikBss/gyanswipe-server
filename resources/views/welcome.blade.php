@@ -1,3 +1,4 @@
+<? php
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
     <head>
@@ -409,7 +410,7 @@
                     <p class="hero-copy">Swipe through micro-lessons, join active learner communities, and keep knowledge within reach. GyanSwipe is built for curiosity, speed, and social learning on Android.</p>
 
                     <div class="download-row">
-                        <a href="https://example.com/GyanSwipe.apk" target="_blank" rel="noreferrer noopener" class="download-btn">Download APK</a>
+                        <a href="{{ route('apk.download', ['filename' => 'Dyutam.apk']) }}" target="_blank" rel="noreferrer noopener" class="download-btn">Download APK</a>
                         <span class="download-note">Install directly on Android devices with one click.</span>
                     </div>
 
