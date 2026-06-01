@@ -8,8 +8,11 @@ class Content extends Model
 {
     protected $guarded = [];
     protected $casts = [
-        'duration_seconds' => 'decimal:2',
-        'rating' => 'decimal:2',
+        'duration_seconds' => 'float',
+        'like_count' => 'integer',
+        'save_count' => 'integer',
+        'view_count' => 'integer',
+        'rating' => 'float',
         'body' => 'array',
     ];
 
