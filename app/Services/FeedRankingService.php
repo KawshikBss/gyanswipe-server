@@ -9,10 +9,14 @@ use App\Models\UserPreferredCategory;
 
 class FeedRankingService
 {
+    public function __construct(
+        protected TranslationService $translationService
+    ) {}
     public function rank(
         string $deviceId,
         int $page = 1,
-        int $perPage = 10
+        int $perPage = 10,
+        string $lang = 'en'
     ) {
         // USER CATEGORY INTERESTS
         $categoryScores =
@@ -79,7 +83,8 @@ class FeedRankingService
             $likedIds,
             $savedIds,
             $viewedIds,
-            $preferredCategoryIds
+            $preferredCategoryIds,
+            $lang
         ) {
 
             $content->ranking_score =
@@ -99,6 +104,19 @@ class FeedRankingService
 
             $content->is_viewed =
                 isset($viewedIds[$content->id]);
+
+            $translation =
+                $this->translationService
+                ->getTranslatedContent(
+                    $content,
+                    $lang
+                );
+
+            $content->title =
+                $translation->title;
+
+            $content->body =
+                $translation->body;
 
             return $content;
         });

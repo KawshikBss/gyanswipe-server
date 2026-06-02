@@ -15,7 +15,7 @@ class FeedController extends Controller
     ) {}
     public function index(Request $request)
     {
-        $rankedContents = $this->feedRankingService->rank($request->device_id, $request->input('page', 1), $request->input('per_page', 10));
+        $rankedContents = $this->feedRankingService->rank($request->device_id, $request->input('page', 1), $request->input('per_page', 10), $request->input('lang', 'en'));
         return response()->json($rankedContents);
         $userPreferredCategories = UserPreferredCategory::where('device_id', $request->device_id)->pluck('category_id')->toArray();
         $contents = Content::where('is_published', true)->when(
