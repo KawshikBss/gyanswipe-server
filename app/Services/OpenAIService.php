@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\Content;
 use OpenAI;
 
 class OpenAIService
@@ -78,5 +79,46 @@ class OpenAIService
 
             Category: {$categoryName}
         ";
+    }
+
+    public function translateContent(
+        Content $content,
+        string $language
+    ): array {
+
+        $payload = [
+            'title' => $content->title,
+            'body' => $content->body,
+        ];
+
+        $prompt = "
+            Translate the following content to {$language}.
+
+            Rules:
+            - Preserve JSON structure exactly.
+            - Translate only text content.
+            - Do not modify image URLs.
+            - Return valid JSON only.
+
+            Content:
+            " . json_encode($payload, JSON_UNESCAPED_UNICODE);
+
+        $response = $this->client->chat()->create([
+            'model' => 'gpt-4.1-mini',
+            'messages' => [
+                [
+                    'role' => 'user',
+                    'content' => $prompt,
+                ]
+            ],
+            'response_format' => [
+                'type' => 'json_object'
+            ]
+        ]);
+
+        return json_decode(
+            $response->choices[0]->message->content,
+            true
+        );
     }
 }
