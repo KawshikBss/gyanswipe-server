@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Content;
 use App\Models\UserActivity;
+use App\Services\TranslationService;
 use Illuminate\Http\Request;
 
 class ContentController extends Controller
@@ -39,8 +40,13 @@ class ContentController extends Controller
         return response()->json($content, 201);
     }
 
-    public function show(Request $request, Content $content)
-    {
+    public function show(
+        Request $request,
+        Content $content,
+        TranslationService $translationService
+    ) {
+        $language =
+            $request->get('lang', 'en');
         $activities = UserActivity::query()
             ->where('device_id', $request->device_id)
             ->where('content_id', $content->id)
@@ -49,6 +55,19 @@ class ContentController extends Controller
         $content->is_liked = $activitySet->contains('like');
         $content->is_saved = $activitySet->contains('save');
         $content->is_viewed = $activitySet->contains('view');
+        $translation =
+            $translationService
+            ->getTranslatedContent(
+                $content,
+                $language
+            );
+
+        $content->title =
+            $translation->title;
+
+        $content->body =
+            $translation->body;
+            
         return response()->json($content);
     }
 
