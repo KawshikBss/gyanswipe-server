@@ -18,23 +18,28 @@ class Content extends Model
 
     protected $appends = ['summary'];
 
-    public function getSummaryAttribute()
+    public function getSummaryAttribute(): string
     {
-        // $data = json_decode($this->body, true);
-        if (isset($this->body['blocks']) && is_array($this->body['blocks'])) {
-            $text = '';
-            foreach ($this->body['blocks'] as $block) {
-                if (isset($block['type']) && $block['type'] === 'text' && isset($block['value'])) {
-                    $text .= strip_tags($block['value']) . ' ';
-                }
-            }
-            return substr(trim($text), 0, 200) . (strlen($text) > 200 ? '...' : '');
-        }
-        return null;
+        $text = collect($this->body['blocks'] ?? [])
+            ->where('type', 'text')
+            ->pluck('value')
+            ->implode(' ');
+
+        return mb_substr(
+            $text,
+            0,
+            200,
+            'UTF-8'
+        ) . '...';
     }
 
     public function activities()
     {
         return $this->hasMany(UserActivity::class);
+    }
+
+    public function translations()
+    {
+        return $this->hasMany(ContentTranslation::class);
     }
 }
