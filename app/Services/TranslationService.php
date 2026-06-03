@@ -32,10 +32,7 @@ class TranslationService
             return $existing;
         }
 
-        return $this->translateAndSave(
-            $content,
-            $language
-        );
+        return $content;
     }
 
     public function translateAndSave(
