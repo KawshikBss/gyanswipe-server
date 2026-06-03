@@ -6,12 +6,14 @@ use App\Models\Content;
 use App\Models\UserActivity;
 use App\Models\UserPreferredCategory;
 use App\Services\FeedRankingService;
+use App\Services\TranslationService;
 use Illuminate\Http\Request;
 
 class FeedController extends Controller
 {
     public function __construct(
-        protected FeedRankingService $feedRankingService
+        protected FeedRankingService $feedRankingService,
+        protected TranslationService $translationService
     ) {}
     public function index(Request $request)
     {
@@ -58,6 +60,7 @@ class FeedController extends Controller
 
     public function saved(Request $request)
     {
+        $lang = $request->input('lang', 'en');
         $activities = UserActivity::query()
             ->where('device_id', $request->device_id)
             ->where('action', 'save')->get();
@@ -69,7 +72,7 @@ class FeedController extends Controller
             ->get();
         $grouped = $activities->groupBy('content_id');
         $contents->getCollection()->transform(
-            function ($content) use ($grouped) {
+            function ($content) use ($grouped, $lang) {
 
                 $activitySet =
                     collect($grouped[$content->id] ?? [])
@@ -84,6 +87,19 @@ class FeedController extends Controller
                 $content->is_viewed =
                     $activitySet->contains('view');
 
+                $translation =
+                    $this->translationService
+                    ->getTranslatedContent(
+                        $content,
+                        $lang
+                    );
+
+                $content->title =
+                    $translation->title;
+
+                $content->body =
+                    $translation->body;
+
                 return $content;
             }
         );
@@ -93,6 +109,7 @@ class FeedController extends Controller
     public function search(Request $request)
     {
         $query = $request->input('query');
+        $lang = $request->input('lang', 'en');
         $categories = $request->input('categories', []) ?? [];
         if (is_string($categories) && !empty($categories)) {
             $categories = explode(',', $categories);
@@ -116,7 +133,7 @@ class FeedController extends Controller
             ->get();
         $grouped = $activities->groupBy('content_id');
         $contents->getCollection()->transform(
-            function ($content) use ($grouped) {
+            function ($content) use ($grouped, $lang) {
 
                 $activitySet =
                     collect($grouped[$content->id] ?? [])
@@ -131,6 +148,19 @@ class FeedController extends Controller
                 $content->is_viewed =
                     $activitySet->contains('view');
 
+
+                $translation =
+                    $this->translationService
+                    ->getTranslatedContent(
+                        $content,
+                        $lang
+                    );
+
+                $content->title =
+                    $translation->title;
+
+                $content->body =
+                    $translation->body;
                 return $content;
             }
         );
