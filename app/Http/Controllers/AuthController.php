@@ -11,13 +11,23 @@ class AuthController extends Controller
     {
         $validatedData = $request->validate([
             'name' => 'required|string|max:255',
+            'username' => 'required|string|max:255|unique:users',
             'email' => 'required|string|email|max:255|unique:users',
+            'avatar' => 'required|image|max:2048',
             'password' => 'required|string|min:8',
         ]);
 
+        if ($request->hasFile('avatar')) {
+            $avatarPath = $request->file('avatar')->store('profiles', 'public');
+        } else {
+            $avatarPath = null;
+        }
+
         $user = User::create([
             'name' => $validatedData['name'],
+            'username' => $validatedData['username'],
             'email' => $validatedData['email'],
+            'avatar' => $avatarPath,
             'password' => bcrypt($validatedData['password']),
         ]);
 
