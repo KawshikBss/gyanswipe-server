@@ -35,8 +35,8 @@ Route::group(['prefix' => 'contents'], function () {
 });
 
 Route::group(['prefix' => 'activities', 'middleware' => 'sanctum'], function () {
-    Route::post('/activities/toggle', [ActivityController::class, 'toggle']);
-    Route::post('/activities/view', [ActivityController::class, 'view']);
+    Route::post('/toggle', [ActivityController::class, 'toggle']);
+    Route::post('/view', [ActivityController::class, 'view']);
 });
 
 Route::get('/feed', [FeedController::class, 'index'])->middleware('auth:sanctum');
