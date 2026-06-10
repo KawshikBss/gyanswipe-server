@@ -34,7 +34,7 @@ Route::group(['prefix' => 'contents'], function () {
     Route::delete('/{content}', [ContentController::class, 'destroy'])->middleware('auth:sanctum');
 });
 
-Route::group(['prefix' => 'activities', 'middleware' => 'sanctum'], function () {
+Route::group(['prefix' => 'activities', 'middleware' => 'auth:sanctum'], function () {
     Route::post('/toggle', [ActivityController::class, 'toggle']);
     Route::post('/view', [ActivityController::class, 'view']);
 });
