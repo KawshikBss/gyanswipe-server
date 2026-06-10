@@ -17,7 +17,7 @@ class FeedController extends Controller
     public function index(Request $request)
     {
         $user = auth()->user();
-        $userId = $user->id();
+        $userId = $user->id;
         $rankedContents = $this->feedRankingService->rank($userId, $request->input('page', 1), $request->input('per_page', 10), $request->input('lang', 'en'));
         return response()->json($rankedContents);
     }
