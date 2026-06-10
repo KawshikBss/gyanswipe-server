@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Content;
 use App\Models\UserActivity;
-use App\Models\UserPreferredCategory;
 use App\Services\FeedRankingService;
 use App\Services\TranslationService;
 use Illuminate\Http\Request;
@@ -18,47 +17,9 @@ class FeedController extends Controller
     public function index(Request $request)
     {
         $user = auth()->user();
-        return dd($user);
         $userId = $user->id();
         $rankedContents = $this->feedRankingService->rank($userId, $request->input('page', 1), $request->input('per_page', 10), $request->input('lang', 'en'));
         return response()->json($rankedContents);
-        $userPreferredCategories = UserPreferredCategory::where('user_id', $userId)->pluck('category_id')->toArray();
-        $contents = Content::where('is_published', true)->when(
-            count($userPreferredCategories),
-            fn($q) =>
-            $q->whereIn(
-                'category_id',
-                $userPreferredCategories
-            )
-        )
-            ->orderBy('published_at', 'desc')
-            ->paginate(3);
-        $contentIds = $contents->pluck('id');
-        $activities = UserActivity::query()
-            ->where('user_id', $userId)
-            ->whereIn('content_id', $contentIds)
-            ->get();
-        $grouped = $activities->groupBy('content_id');
-        $contents->getCollection()->transform(
-            function ($content) use ($grouped) {
-
-                $activitySet =
-                    collect($grouped[$content->id] ?? [])
-                    ->pluck('action');
-
-                $content->is_liked =
-                    $activitySet->contains('like');
-
-                $content->is_saved =
-                    $activitySet->contains('save');
-
-                $content->is_viewed =
-                    $activitySet->contains('view');
-
-                return $content;
-            }
-        );
-        return response()->json($contents);
     }
 
     public function saved(Request $request)
