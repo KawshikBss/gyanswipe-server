@@ -15,7 +15,7 @@ class ActivityController extends Controller
     {
         $user = auth()->user();
 
-        $activities = $user->activities()->latest()->paginate(10);
+        $activities = $user->activities()->with(['content'])->latest()->paginate(10);
 
         return response()->json($activities);
     }
