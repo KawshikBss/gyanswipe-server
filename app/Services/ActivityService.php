@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\DB;
 class ActivityService
 {
     public function toggle(
-        string $deviceId,
+        int $userId,
         int $contentId,
         string $action,
         float $durationSeconds,
@@ -22,7 +22,7 @@ class ActivityService
         };
 
         return DB::transaction(function () use (
-            $deviceId,
+            $userId,
             $contentId,
             $action,
             $counterField,
@@ -31,7 +31,7 @@ class ActivityService
         ) {
 
             $existing = UserActivity::where([
-                'device_id' => $deviceId,
+                'user_id' => $userId,
                 'content_id' => $contentId,
                 'action' => $action,
             ])->first();
@@ -59,7 +59,7 @@ class ActivityService
             }
 
             UserActivity::create([
-                'device_id' => $deviceId,
+                'user_id' => $userId,
                 'content_id' => $contentId,
                 'category_id' => $content->category_id,
                 'action' => $action,
@@ -69,7 +69,7 @@ class ActivityService
             ]);
 
             app(CategoryAffinityService::class)->update(
-                $deviceId,
+                $userId,
                 $content->category_id,
                 $action,
                 $durationSeconds,
@@ -87,14 +87,14 @@ class ActivityService
     }
 
     public function trackView(
-        string $deviceId,
+        int $userId,
         int $contentId,
         float $durationSeconds,
         string $source = 'feed',
     ) {
 
         $activity = UserActivity::where([
-            'device_id' => $deviceId,
+            'user_id' => $userId,
             'content_id' => $contentId,
             'action' => 'view',
         ])->first();
@@ -105,7 +105,7 @@ class ActivityService
         }
 
         DB::transaction(function () use (
-            $deviceId,
+            $userId,
             $contentId,
             $durationSeconds,
             $source,
@@ -122,7 +122,7 @@ class ActivityService
             }
 
             UserActivity::create([
-                'device_id' => $deviceId,
+                'user_id' => $userId,
                 'content_id' => $contentId,
                 'category_id' => $content->category_id,
                 'action' => 'view',
@@ -132,7 +132,7 @@ class ActivityService
             ]);
 
             app(CategoryAffinityService::class)->update(
-                $deviceId,
+                $userId,
                 $content->category_id,
                 'view',
                 $durationSeconds,

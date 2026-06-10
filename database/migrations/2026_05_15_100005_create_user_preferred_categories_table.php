@@ -13,11 +13,14 @@ return new class extends Migration
     {
         Schema::create('user_preferred_categories', function (Blueprint $table) {
             $table->id();
-            $table->string('device_id');
+            $table->foreignId('user_id')
+                ->nullable()
+                ->constrained()
+                ->cascadeOnDelete();
             $table->foreignId('category_id')->constrained()->onDelete('cascade');
             $table->timestamps();
 
-            $table->unique(['device_id', 'category_id']);
+            $table->unique(['user_id', 'category_id']);
         });
     }
 

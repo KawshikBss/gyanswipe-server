@@ -13,7 +13,7 @@ class FeedRankingService
         protected TranslationService $translationService
     ) {}
     public function rank(
-        string $deviceId,
+        string $userId,
         int $page = 1,
         int $perPage = 10,
         string $lang = 'en'
@@ -21,8 +21,8 @@ class FeedRankingService
         // USER CATEGORY INTERESTS
         $categoryScores =
             UserCategoryScore::where(
-                'device_id',
-                $deviceId
+                'user_id',
+                $userId
             )
             ->pluck('score', 'category_id')
             ->toArray();
@@ -30,8 +30,8 @@ class FeedRankingService
         // SEEN CONTENTS
         $userActivities =
             UserActivity::where(
-                'device_id',
-                $deviceId
+                'user_id',
+                $userId
             )
             ->get();
 
@@ -53,8 +53,8 @@ class FeedRankingService
 
         $preferredCategoryIds =
             UserPreferredCategory::where(
-                'device_id',
-                $deviceId
+                'user_id',
+                $userId
             )
             ->pluck('category_id')
             ->flip()
@@ -78,7 +78,7 @@ class FeedRankingService
         $ranked = $contents->map(function (
             $content
         ) use (
-            $deviceId,
+            $userId,
             $categoryScores,
             $likedIds,
             $savedIds,
@@ -89,7 +89,7 @@ class FeedRankingService
 
             $content->ranking_score =
                 $this->calculateScore(
-                    $deviceId,
+                    $userId,
                     $content,
                     $categoryScores,
                     $viewedIds,
@@ -149,7 +149,7 @@ class FeedRankingService
     }
 
     private function calculateScore(
-        string $deviceId,
+        string $userId,
         Content $content,
         array $categoryScores,
         array $viewedIds,
@@ -200,7 +200,7 @@ class FeedRankingService
 
         // EXPLORATION BONUS
         $score += crc32(
-            $content->id . $deviceId
+            $content->id . $userId
         ) % 10;
 
         return $score;

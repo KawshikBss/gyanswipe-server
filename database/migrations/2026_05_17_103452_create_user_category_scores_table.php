@@ -13,13 +13,16 @@ return new class extends Migration
     {
         Schema::create('user_category_scores', function (Blueprint $table) {
             $table->id();
-            $table->string('device_id');
+            $table->foreignId('user_id')
+                ->nullable()
+                ->constrained()
+                ->cascadeOnDelete();
             $table->foreignId('category_id')->constrained()->onDelete('cascade');
             $table->double('score')
                 ->default(0);
             $table->timestamps();
 
-            $table->unique(['device_id', 'category_id']);
+            $table->unique(['user_id', 'category_id']);
         });
     }
 

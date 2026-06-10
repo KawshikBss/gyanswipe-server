@@ -11,7 +11,9 @@ class CategoryController extends Controller
     public function index(Request $request)
     {
         $categories = Category::paginate(10);
-        $userPreferredCategories = UserPreferredCategory::where('device_id', $request->device_id)->pluck('category_id')->toArray();
+        $user = auth()->user();
+        $userId = $user->id;
+        $userPreferredCategories = UserPreferredCategory::where('user_id', $userId)->pluck('category_id')->toArray();
         $categories->getCollection()->transform(function ($category) use ($userPreferredCategories) {
             $category->is_preferred = in_array($category->id, $userPreferredCategories);
             return $category;
@@ -79,11 +81,10 @@ class CategoryController extends Controller
 
     public function togglePreference(Request $request, Category $category)
     {
-        $request->validate([
-            'device_id' => 'required|string|max:255',
-        ]);
+        $user = auth()->user();
+        $userId = $user->id;
 
-        $userPreferredCategory = UserPreferredCategory::where('device_id', $request->device_id)
+        $userPreferredCategory = UserPreferredCategory::where('user_id', $userId)
             ->where('category_id', $category->id)
             ->first();
 
@@ -92,7 +93,7 @@ class CategoryController extends Controller
             return response()->json(['message' => 'Preference removed', 'active' => false]);
         } else {
             UserPreferredCategory::create([
-                'device_id' => $request->device_id,
+                'user_id' => $userId,
                 'category_id' => $category->id,
             ]);
             return response()->json(['message' => 'Preference added', 'active' => true]);

@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class UserActivity extends Model
 {
     protected $fillable = [
-        'device_id',
+        'user_id',
         'content_id',
         'category_id',
         'action',
@@ -15,6 +15,11 @@ class UserActivity extends Model
         'completion_percent',
         'source',
     ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 
     public function content()
     {

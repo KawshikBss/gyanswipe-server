@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class UserCategoryScore extends Model
 {
     protected $fillable = [
-        'device_id',
+        'user_id',
         'category_id',
         'score',
     ];

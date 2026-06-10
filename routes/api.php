@@ -18,25 +18,25 @@ Route::get('/user', [AuthController::class, 'user'])->middleware('auth:sanctum')
 Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
 
 Route::group(['prefix' => 'categories'], function () {
-    Route::get('/', [CategoryController::class, 'index']);
-    Route::post('/', [CategoryController::class, 'store']);
-    Route::get('/{category}', [CategoryController::class, 'show']);
-    Route::post('/{category}/update', [CategoryController::class, 'update']);
-    Route::post('/{category}/toggle-preference', [CategoryController::class, 'togglePreference']);
-    Route::delete('/{category}', [CategoryController::class, 'destroy']);
+    Route::get('/', [CategoryController::class, 'index'])->middleware('auth:sanctum');
+    Route::post('/', [CategoryController::class, 'store'])->middleware('auth:sanctum');
+    Route::get('/{category}', [CategoryController::class, 'show'])->middleware('auth:sanctum');
+    Route::post('/{category}/update', [CategoryController::class, 'update'])->middleware('auth:sanctum');
+    Route::post('/{category}/toggle-preference', [CategoryController::class, 'togglePreference'])->middleware('auth:sanctum');
+    Route::delete('/{category}', [CategoryController::class, 'destroy'])->middleware('auth:sanctum');
 });
 
 Route::group(['prefix' => 'contents'], function () {
-    Route::get('/', [ContentController::class, 'index']);
-    Route::post('/', [ContentController::class, 'store']);
-    Route::get('/{content}', [ContentController::class, 'show']);
-    Route::post('/{content}/update', [ContentController::class, 'update']);
-    Route::delete('/{content}', [ContentController::class, 'destroy']);
+    Route::get('/', [ContentController::class, 'index'])->middleware('auth:sanctum');
+    Route::post('/', [ContentController::class, 'store'])->middleware('auth:sanctum');
+    Route::get('/{content}', [ContentController::class, 'show'])->middleware('auth:sanctum');
+    Route::post('/{content}/update', [ContentController::class, 'update'])->middleware('auth:sanctum');
+    Route::delete('/{content}', [ContentController::class, 'destroy'])->middleware('auth:sanctum');
 });
 
-Route::get('/feed', [FeedController::class, 'index']);
-Route::get('/saved', [FeedController::class, 'saved']);
-Route::get('/search', [FeedController::class, 'search']);
+Route::get('/feed', [FeedController::class, 'index'])->middleware('auth:sanctum');
+Route::get('/saved', [FeedController::class, 'saved'])->middleware('auth:sanctum');
+Route::get('/search', [FeedController::class, 'search'])->middleware('auth:sanctum');
 
-Route::post('/activities/toggle', [ActivityController::class, 'toggle']);
-Route::post('/activities/view', [ActivityController::class, 'view']);
+Route::post('/activities/toggle', [ActivityController::class, 'toggle'])->middleware('auth:sanctum');
+Route::post('/activities/view', [ActivityController::class, 'view'])->middleware('auth:sanctum');

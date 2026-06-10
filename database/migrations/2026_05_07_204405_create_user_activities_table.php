@@ -13,12 +13,19 @@ return new class extends Migration
     {
         Schema::create('user_activities', function (Blueprint $table) {
             $table->id();
-            $table->string('device_id');
+            $table->foreignId('user_id')
+                ->nullable()
+                ->constrained()
+                ->cascadeOnDelete();
             $table->foreignId('content_id')->constrained()->onDelete('cascade');
+            $table->foreignId('category_id')->nullable()->constrained()->onDelete('cascade');
             $table->string('action');
+            $table->integer('duration_seconds')->nullable();
+            $table->integer('completion_percent')->nullable();
+            $table->string('source')->default('feed');
             $table->timestamps();
 
-            $table->unique(['device_id', 'content_id', 'action']);
+            $table->unique(['user_id', 'content_id', 'action']);
         });
     }
 

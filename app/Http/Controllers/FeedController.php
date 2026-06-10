@@ -17,9 +17,12 @@ class FeedController extends Controller
     ) {}
     public function index(Request $request)
     {
-        $rankedContents = $this->feedRankingService->rank($request->device_id, $request->input('page', 1), $request->input('per_page', 10), $request->input('lang', 'en'));
+        $user = auth()->user();
+        return dd($user);
+        $userId = $user->id();
+        $rankedContents = $this->feedRankingService->rank($userId, $request->input('page', 1), $request->input('per_page', 10), $request->input('lang', 'en'));
         return response()->json($rankedContents);
-        $userPreferredCategories = UserPreferredCategory::where('device_id', $request->device_id)->pluck('category_id')->toArray();
+        $userPreferredCategories = UserPreferredCategory::where('user_id', $userId)->pluck('category_id')->toArray();
         $contents = Content::where('is_published', true)->when(
             count($userPreferredCategories),
             fn($q) =>
@@ -32,7 +35,7 @@ class FeedController extends Controller
             ->paginate(3);
         $contentIds = $contents->pluck('id');
         $activities = UserActivity::query()
-            ->where('device_id', $request->device_id)
+            ->where('user_id', $userId)
             ->whereIn('content_id', $contentIds)
             ->get();
         $grouped = $activities->groupBy('content_id');
@@ -60,14 +63,16 @@ class FeedController extends Controller
 
     public function saved(Request $request)
     {
+        $user = auth()->user();
+        $userId = $user->id;
         $lang = $request->input('lang', 'en');
         $activities = UserActivity::query()
-            ->where('device_id', $request->device_id)
+            ->where('user_id', $userId)
             ->where('action', 'save')->get();
         $contentIds = $activities->pluck('content_id');
         $contents = Content::whereIn('id', $contentIds)->paginate(5);
         $activities = UserActivity::query()
-            ->where('device_id', $request->device_id)
+            ->where('user_id', $userId)
             ->whereIn('content_id', $contentIds)
             ->get();
         $grouped = $activities->groupBy('content_id');
@@ -108,6 +113,8 @@ class FeedController extends Controller
 
     public function search(Request $request)
     {
+        $user = auth()->user();
+        $userId = $user->id;
         $query = $request->input('query');
         $lang = $request->input('lang', 'en');
         $categories = $request->input('categories', []) ?? [];
@@ -128,7 +135,7 @@ class FeedController extends Controller
             ->paginate(5);
         $contentIds = $contents->pluck('id');
         $activities = UserActivity::query()
-            ->where('device_id', $request->device_id)
+            ->where('user_id', $userId)
             ->whereIn('content_id', $contentIds)
             ->get();
         $grouped = $activities->groupBy('content_id');

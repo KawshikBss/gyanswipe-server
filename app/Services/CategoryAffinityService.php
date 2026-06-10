@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\DB;
 class CategoryAffinityService
 {
     public function update(
-        string $deviceId,
+        int $userId,
         int $categoryId,
         string $type,
         ?int $duration = null,
@@ -46,7 +46,7 @@ class CategoryAffinityService
 
         UserCategoryScore::updateOrCreate(
             [
-                'device_id' => $deviceId,
+                'user_id' => $userId,
                 'category_id' => $categoryId,
             ],
             [

@@ -45,10 +45,12 @@ class ContentController extends Controller
         Content $content,
         TranslationService $translationService
     ) {
+        $user = auth()->user();
+        $userId = $user->id;
         $language =
             $request->get('lang', 'en');
         $activities = UserActivity::query()
-            ->where('device_id', $request->device_id)
+            ->where('user_id', $userId)
             ->where('content_id', $content->id)
             ->get();
         $activitySet = $activities->pluck('action');
@@ -67,7 +69,7 @@ class ContentController extends Controller
 
         $content->body =
             $translation->body;
-            
+
         return response()->json($content);
     }
 
