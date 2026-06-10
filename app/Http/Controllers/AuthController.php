@@ -13,7 +13,7 @@ class AuthController extends Controller
             'name' => 'required|string|max:255',
             'username' => 'required|string|max:255|unique:users',
             'email' => 'required|string|email|max:255|unique:users',
-            'avatar' => 'required|image|max:2048',
+            'avatar' => 'nullable|image|max:2048',
             'password' => 'required|string|min:8',
         ]);
 
