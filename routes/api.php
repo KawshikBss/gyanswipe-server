@@ -34,9 +34,11 @@ Route::group(['prefix' => 'contents'], function () {
     Route::delete('/{content}', [ContentController::class, 'destroy'])->middleware('auth:sanctum');
 });
 
+Route::group(['prefix' => 'activities', 'middleware' => 'sanctum'], function () {
+    Route::post('/activities/toggle', [ActivityController::class, 'toggle']);
+    Route::post('/activities/view', [ActivityController::class, 'view']);
+});
+
 Route::get('/feed', [FeedController::class, 'index'])->middleware('auth:sanctum');
 Route::get('/saved', [FeedController::class, 'saved'])->middleware('auth:sanctum');
 Route::get('/search', [FeedController::class, 'search'])->middleware('auth:sanctum');
-
-Route::post('/activities/toggle', [ActivityController::class, 'toggle'])->middleware('auth:sanctum');
-Route::post('/activities/view', [ActivityController::class, 'view'])->middleware('auth:sanctum');

@@ -57,4 +57,9 @@ class User extends Authenticatable
 
         return Storage::disk('public')->url($value);
     }
+
+    public function activities()
+    {
+        return $this->hasMany(UserActivity::class);
+    }
 }

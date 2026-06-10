@@ -11,6 +11,15 @@ class ActivityController extends Controller
         protected ActivityService $activityService
     ) {}
 
+    public function index(Request $request)
+    {
+        $user = auth()->user();
+
+        $activities = $user->activities()->latest()->paginate(10);
+
+        return response()->json($activities);
+    }
+
     public function toggle(Request $request)
     {
         $user = auth()->user();
