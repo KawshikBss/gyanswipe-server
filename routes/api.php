@@ -3,6 +3,7 @@
 use App\Http\Controllers\ActivityController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\CommentController;
 use App\Http\Controllers\ContentController;
 use App\Http\Controllers\FeedController;
 use Illuminate\Http\Request;
@@ -31,6 +32,8 @@ Route::group(['prefix' => 'contents', 'middleware' => 'auth:sanctum'], function 
     Route::post('/', [ContentController::class, 'store']);
     Route::get('/{content}', [ContentController::class, 'show']);
     Route::post('/{content}/update', [ContentController::class, 'update']);
+    Route::post('{content}/comment', [CommentController::class, 'store']);
+    Route::get('/{content}/comments', [CommentController::class, 'getContentComments']);
     Route::delete('/{content}', [ContentController::class, 'destroy']);
 });
 
@@ -39,6 +42,8 @@ Route::group(['prefix' => 'activities', 'middleware' => 'auth:sanctum'], functio
     Route::post('/toggle', [ActivityController::class, 'toggle']);
     Route::post('/view', [ActivityController::class, 'view']);
 });
+
+Route::group(['prefix' => 'comments', 'middleware' => 'auth:sanctum'], function () {});
 
 Route::get('/feed', [FeedController::class, 'index'])->middleware('auth:sanctum');
 Route::get('/saved', [FeedController::class, 'saved'])->middleware('auth:sanctum');
