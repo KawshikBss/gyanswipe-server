@@ -42,4 +42,9 @@ class Content extends Model
     {
         return $this->hasMany(ContentTranslation::class);
     }
+
+    public function comments()
+    {
+        return $this->hasMany(Comment::class);
+    }
 }
