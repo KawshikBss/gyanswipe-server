@@ -171,6 +171,8 @@ class FeedRankingService
 
         $score +=
             sqrt($content->view_count) * 1.5;
+        $score +=
+            sqrt($content->comment_count) * 8;
 
         // RATING
         $score +=
