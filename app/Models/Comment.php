@@ -7,6 +7,15 @@ use Illuminate\Database\Eloquent\Model;
 class Comment extends Model
 {
     protected $guarded = [];
+    protected $appends = ['time'];
+    protected $casts = [
+        'updated_at' => 'datetime',
+    ];
+
+    public function getTimeAttribute()
+    {
+        return $this->updated_at ? $this->updated_at->diffForHumans() : null;
+    }
 
     public function user()
     {
