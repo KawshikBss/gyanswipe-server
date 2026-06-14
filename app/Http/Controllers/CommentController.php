@@ -27,7 +27,7 @@ class CommentController extends Controller
 
     public function getContentComments(Request $request, Content $content)
     {
-        $comments = $content->comments()->whereNull('parent_id')->with('replies')->paginate(10);
+        $comments = $content->comments()->whereNull('parent_id')->with(['replies', 'user'])->paginate(10);
         return response()->json($comments);
     }
 }
