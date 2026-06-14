@@ -32,7 +32,7 @@ Route::group(['prefix' => 'contents', 'middleware' => 'auth:sanctum'], function 
     Route::post('/', [ContentController::class, 'store']);
     Route::get('/{content}', [ContentController::class, 'show']);
     Route::post('/{content}/update', [ContentController::class, 'update']);
-    Route::post('{content}/comment', [CommentController::class, 'store']);
+    Route::post('{content}/comments', [CommentController::class, 'store']);
     Route::get('/{content}/comments', [CommentController::class, 'getContentComments']);
     Route::delete('/{content}', [ContentController::class, 'destroy']);
 });
